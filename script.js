@@ -59,7 +59,7 @@ function start() {
 		},
 		stop: function(e) {
 			$(this).appendTo("#playing-field");
-			// $(this).offset({left: e.pageX - 40, top: e.pageY - 40});
+			$(this).offset({left: e.pageX - 40, top: e.pageY - 40});
 			fsCache.hide();
 			fsCache.get(0).src = "";
 			fsCache.appendTo("#shapes-bar");
