@@ -1,0 +1,121 @@
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-image: url(rainbow.jpg);
+	background-color: #08002c;
+	font-family: Arial, Helvetica, sans-serif;
+	height: 100%;
+	width: 100%;
+}
+
+.perms-overlay {
+	height: 100%;
+	width: 100%;
+	background-color: #404040f8;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.perms-overlay p {
+	color: white;
+	text-align: center;
+	background-color: gray;
+}
+
+h1.menu-title {
+	font-weight: 700;
+	color: white;
+	text-align: center;
+	background-color: black;
+	border-radius: 10px;
+}
+
+button {
+	font-size: 20px;
+	font-weight: 900;
+	width: 200px;
+	height: 60px;
+	border-radius: 10px;
+	border: 5px solid black;
+	background-color: white;
+}
+button:focus {
+	outline: none;
+	border-color: cornflowerblue;
+}
+button:hover {
+	background-color: #d0ecfd;
+}
+button:active {
+	background-color: lightskyblue;
+}
+
+button.menu {
+	margin-top: 5%;
+	margin-left: calc(50% - 102.5px);
+}
+
+#allow-audio:hover {
+	background-color: lightgreen;
+}
+#deny-audio:hover {
+	background-color: pink;
+}
+#allow-audio:active {
+	background-color: #4ce44c; /* force for force XD */
+}
+#deny-audio:active {
+	background-color: #ff728a;
+}
+
+/***************\
+*               *
+* Ingame styles *
+*               *
+\***************/
+
+#shapes-bar {
+	background-color: slateblue;
+	float: right;
+	border: 5px solid white;
+	border-radius: 10px;
+	height: 70vh;
+	width: 235px;
+	overflow: scroll;
+}
+#shapes-bar .shape {
+	border: 2px solid lightblue;
+	padding: 10px;
+	border-radius: 15px;
+	margin: 2.5px 5px;
+}
+#shapes-bar div {
+	border-bottom: 5px solid lightblue;
+	font-variant: small-caps;
+	text-align: center;
+}
+
+#playing-field {
+	position: fixed;
+	background-image: url(playfield-background.jpg);
+	height: 100%;
+	width: calc(100% - 250px);
+}
+
+.shape {
+	width: 80px;
+	height: 80px;
+	cursor: grabbing;
+}
+
+.fake-shape {
+	position: fixed;
+	z-index: 8;
+}
