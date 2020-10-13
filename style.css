@@ -86,9 +86,10 @@ button.menu {
 	float: right;
 	border: 5px solid white;
 	border-radius: 10px;
-	height: 70vh;
-	width: 235px;
-	overflow: scroll;
+	height: 100%;
+	width: 250px;
+	overflow: visible;
+	box-sizing: border-box;
 }
 #shapes-bar .shape {
 	border: 2px solid lightblue;
@@ -107,6 +108,9 @@ button.menu {
 	background-image: url(playfield-background.jpg);
 	height: 100%;
 	width: calc(100% - 250px);
+}
+#playing-field .shape {
+	cursor: default;
 }
 
 .shape {

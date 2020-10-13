@@ -40,29 +40,39 @@ function start() {
 			<img class="real-shape shape" src="sprites/circle.png" alt="Circle" />\
 			<img class="real-shape shape" src="sprites/square.png" alt="Square" />\
 			<img class="real-shape shape" src="sprites/triangle.png" alt="Triangle" />\
-			<img class="fake-shape shape" src="" alt="visual overlay" />\
+			<img class="fake-shape shape" src="" />\
 		</div>\
 		<div id="playing-field"></div>\
 	');
 	var fsCache;
 	$(".fake-shape").hide();
+	var oCache;
 	$(".real-shape").draggable({
 		start: function(e) {
 			$(".fake-shape").appendTo("body");
 			fsCache = $(".fake-shape");
 			fsCache.get(0).src = this.src;
 			fsCache.show();
+			$(this).css("visibility", "hidden");
 		},
 		drag: function(e) {
-			const oCache = $(this).offset();
-			fsCache.offset({left: oCache.left, top: oCache.top});
+			fsCache.offset({left: e.pageX - 40, top: e.pageY - 40});
 		},
 		stop: function(e) {
-			$(this).appendTo("#playing-field");
-			$(this).offset({left: e.pageX - 40, top: e.pageY - 40});
+			var withinBoundaries = e.pageX - 40 > 0 && e.pageY - 40 > 0 && e.pageX + 40 < $("#playing-field").get(0).offsetWidth && e.pageY + 40 < $("#playing-field").get(0).offsetHeight;
+			
+			if (withinBoundaries) {
+				$(this).appendTo("#playing-field");
+				$(this).offset({left: e.pageX - 40, top: e.pageY - 40});
+			}
+			else {
+				$(this).css("position", "static");
+			}
 			fsCache.hide();
+			$(this).css("visibility", "visible");
 			fsCache.get(0).src = "";
 			fsCache.appendTo("#shapes-bar");
+			if (withinBoundaries) $(this).draggable("destroy");
 		}
 	});
 }
