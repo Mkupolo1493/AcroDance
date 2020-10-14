@@ -91,7 +91,9 @@ function start() {
 		$(".undoable").remove();
 	});
 	$("#submit-move").on("click", function() {
-		$(this).addClass("inactive");
-		$(".undoable").removeClass("undoable");
+		if ($(this).hasClass("inactive")) {
+			$(this).addClass("inactive");
+			$(".undoable").removeClass("undoable");
+		}
 	});
 }
