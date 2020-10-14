@@ -43,11 +43,15 @@ function start() {
 			<img class="fake-shape shape" src="" />\
 		</div>\
 		<div id="playing-field"></div>\
+		<div id="submit-container">\
+			<button id="undo-move">⤺</button>\
+			<button id="submit-move" class="inactive">✓</button>\
+		</div>\
 	');
 	var fsCache;
 	$(".fake-shape").hide();
 	var oCache;
-	$(".real-shape").draggable({
+	var shapeDrag = {
 		start: function(e) {
 			$(".fake-shape").appendTo("body");
 			fsCache = $(".fake-shape");
@@ -59,9 +63,11 @@ function start() {
 			fsCache.offset({left: e.pageX - 40, top: e.pageY - 40});
 		},
 		stop: function(e) {
-			var withinBoundaries = e.pageX - 40 > 0 && e.pageY - 40 > 0 && e.pageX + 40 < $("#playing-field").get(0).offsetWidth && e.pageY + 40 < $("#playing-field").get(0).offsetHeight;
+			var legal = (e.pageX - 40 > 0 && e.pageY - 40 > 0 && e.pageX + 40 < $("#playing-field").get(0).offsetWidth && e.pageY + 40 < $("#playing-field").get(0).offsetHeight) && $(".undoable").length < 3;
 			
-			if (withinBoundaries) {
+			if (legal) {
+				$(this).addClass("undoable");
+				if ($(".undoable").length == 3) $("#submit-move").removeClass("inactive");
 				$(this).appendTo("#playing-field");
 				$(this).offset({left: e.pageX - 40, top: e.pageY - 40});
 			}
@@ -72,7 +78,20 @@ function start() {
 			$(this).css("visibility", "visible");
 			fsCache.get(0).src = "";
 			fsCache.appendTo("#shapes-bar");
-			if (withinBoundaries) $(this).draggable("destroy");
+			if (legal) {
+				$(this).clone().draggable(shapeDrag).css("position", "static").removeClass("undoable").appendTo("#shapes-bar");
+				$(this).draggable("destroy");
+			}
 		}
+	};
+	$(".real-shape").draggable(shapeDrag);
+
+	$("#undo-move").on("click", function() {
+		$("#submit-move").addClass("inactive");
+		$(".undoable").remove();
+	});
+	$("#submit-move").on("click", function() {
+		$(this).addClass("inactive");
+		$(".undoable").removeClass("undoable");
 	});
 }
