@@ -48,6 +48,10 @@ function start() {
 			<button id="submit-move" class="inactive">✓</button>\
 		</div>\
 	');
+	$("#playing-field")
+	.width($("#playing-field").width())
+	.height($("#playing-field").height());
+	
 	var fsCache;
 	$(".fake-shape").hide();
 	var oCache;
@@ -91,7 +95,7 @@ function start() {
 		$(".undoable").remove();
 	});
 	$("#submit-move").on("click", function() {
-		if ($(this).hasClass("inactive")) {
+		if (!$(this).hasClass("inactive")) {
 			$(this).addClass("inactive");
 			$(".undoable").removeClass("undoable");
 		}

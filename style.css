@@ -133,6 +133,10 @@ button.menu {
 	z-index: 8;
 }
 
+body .shape {
+	border: 1px solid blue;
+}
+
 #submit-container button {
 	width: 120px;
 	height: 100%;
