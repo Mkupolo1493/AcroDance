@@ -1,4 +1,5 @@
 // From the apparently no longer API-phobic dev 3941driB
+
 var allowAudio;
 window.onload = function() {
 	$("#allow-audio").on("click", function() {
@@ -20,6 +21,7 @@ function loadMenu() {
 	$("#play").on("click", start);
 }
 
+var positions = [];
 function start() {
 	$("body").children().remove();
 	$("body").css("background-image", "none");
@@ -67,13 +69,35 @@ function start() {
 			fsCache.offset({left: e.pageX - 40, top: e.pageY - 40});
 		},
 		stop: function(e) {
-			var legal = (e.pageX - 40 > 0 && e.pageY - 40 > 0 && e.pageX + 40 < $("#playing-field").get(0).offsetWidth && e.pageY + 40 < $("#playing-field").get(0).offsetHeight) && $(".undoable").length < 3;
-			
+			var pos = {
+				// top left coordinates
+				x1: e.pageX - 40,
+				y1: e.pageY - 40,
+
+				// bottom right coordinates
+				x2: e.pageX + 40,
+				y2: e.pageY + 40
+			};
+			positions.push(pos);
+			var legal = (pos.x1 > 0 && pos.y1 > 0 && pos.x2 < $("#playing-field").width() && pos.y2 < $("#playing-field").height()) && $(".undoable").length < 3;
+			console.log("Legal: " + legal);
+				console.log("\tX1: " + pos.x1);
+				console.log("\tY1: " + pos.y1);
+
+				console.log("\n\tX2: " + pos.x2);
+				console.log("\tY2: " + pos.y2);
+
+
+				console.log("\n\n\tField Width: " + $("#playing-field").width());
+				console.log("\tField Height: " + $("#playing-field").height());
+
+
+				console.log("\n\n\tUndoable: " + $(".undoable").length);
 			if (legal) {
 				$(this).addClass("undoable");
 				if ($(".undoable").length == 3) $("#submit-move").removeClass("inactive");
 				$(this).appendTo("#playing-field");
-				$(this).offset({left: e.pageX - 40, top: e.pageY - 40});
+				$(this).offset({left: pos.x1, top: pos.y1});
 			}
 			else {
 				$(this).css("position", "static");
@@ -92,6 +116,9 @@ function start() {
 
 	$("#undo-move").on("click", function() {
 		$("#submit-move").addClass("inactive");
+		for (var i = 0; i < $(".undoable").length; i++) {
+			positions.pop();
+		}
 		$(".undoable").remove();
 	});
 	$("#submit-move").on("click", function() {
@@ -99,5 +126,23 @@ function start() {
 			$(this).addClass("inactive");
 			$(".undoable").removeClass("undoable");
 		}
+		startSim();
 	});
+}
+
+function startSim() {
+	console.log("Positions:");
+	positions.forEach(function(p, i) {
+		console.log("\tShape " + i + ":");
+			console.log("\t\tX1: " + p.x1);
+			console.log("\t\tY1: " + p.y1);
+
+			console.log("\n\t\tX2: " + p.x2);
+			console.log("\t\tY2: " + p.y2);
+	});
+	// Start PGrid Simulation
+}
+
+function pointWithin(point, boundary) {
+	return point[0] > boundary.x1 && point[1] > boundary.y1 && point[0] < boundary.x2 && point[1] < boundary.y2
 }
