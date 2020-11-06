@@ -131,6 +131,7 @@ function start() {
 }
 
 function startSim() {
+	var position = {x: 0, y: 0}; // Change to cannon position later
 	console.log("Positions:");
 	positions.forEach(function(p, i) {
 		console.log("\tShape " + i + ":");
@@ -141,8 +142,14 @@ function startSim() {
 			console.log("\t\tY2: " + p.y2);
 	});
 	// Start PGrid Simulation
+	var modifiers = [];
+	positions.forEach(function(p) {
+		if (pointWithin(position, p) || pointWithin({position.x, position.y + 40}, p) || pointWithin({position.x + 40, position.y}, p) || pointWithin({position.x + 40, position.y + 40}, p)) {
+			modifiers.push(p);
+		}
+	} // In case I forget what I'm doing, I need to not check for intersections, but rather check that neither the x's or the y's are equal.
 }
 
 function pointWithin(point, boundary) {
-	return point[0] > boundary.x1 && point[1] > boundary.y1 && point[0] < boundary.x2 && point[1] < boundary.y2
+	return point.x >= boundary.x1 && point.y >= boundary.y1 && point.x <= boundary.x2 && point.y <= boundary.y2;
 }
