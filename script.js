@@ -78,8 +78,7 @@ function start() {
 				x2: e.pageX + 40,
 				y2: e.pageY + 40
 			};
-			positions.push(pos);
-			var legal = (pos.x1 > 0 && pos.y1 > 0 && pos.x2 < $("#playing-field").width() && pos.y2 < $("#playing-field").height()) && $(".undoable").length < 3;
+			var legal = (pos.x1 >= 0 && pos.y1 >= 0 && pos.x2 <= $("#playing-field").width() && pos.y2 <= $("#playing-field").height()) && $(".undoable").length < 3;
 			console.log("Legal: " + legal);
 				console.log("\tX1: " + pos.x1);
 				console.log("\tY1: " + pos.y1);
@@ -93,7 +92,15 @@ function start() {
 
 
 				console.log("\n\n\tUndoable: " + $(".undoable").length);
+			positions.forEach(function(p) {
+				if (legal) {
+					if (p.x1 == pos.x1 || p.y1 == pos.y1) {
+						legal = false;
+					}
+				}
+			});
 			if (legal) {
+				positions.push(pos);
 				$(this).addClass("undoable");
 				if ($(".undoable").length == 3) $("#submit-move").removeClass("inactive");
 				$(this).appendTo("#playing-field");
@@ -131,7 +138,7 @@ function start() {
 }
 
 function startSim() {
-	var position = {x: 0, y: 0}; // Change to cannon position later
+	var position = {x: 0, y: 0}; // Change to cannon position later (actually pretty easy)
 	console.log("Positions:");
 	positions.forEach(function(p, i) {
 		console.log("\tShape " + i + ":");
@@ -141,13 +148,34 @@ function startSim() {
 			console.log("\n\t\tX2: " + p.x2);
 			console.log("\t\tY2: " + p.y2);
 	});
+
 	// Start PGrid Simulation
 	var modifiers = [];
 	positions.forEach(function(p) {
-		if (pointWithin(position, p) || pointWithin({position.x, position.y + 40}, p) || pointWithin({position.x + 40, position.y}, p) || pointWithin({position.x + 40, position.y + 40}, p)) {
-			modifiers.push(p);
+		if (pointWithin(position, p) || pointWithin({x: position.x, y: position.y + 80}, p) || pointWithin({x: position.x + 80, y: position.y}, p) || pointWithin({x: position.x + 80, y: position.y + 80}, p)) {
+			modifiers.push(p.x1);
+			console.log("Added " + p.x1 + " (x1id)");
 		}
-	} // In case I forget what I'm doing, I need to not check for intersections, but rather check that neither the x's or the y's are equal.
+	});
+	console.log("Modifier x1id's: " + modifiers);
+    
+    var x1id;
+    // In-place x1id replacement
+    $("#playing-field").children().each(function() {
+        x1id = $(this).offset().left;
+        if (modifiers.includes(x1id)) {
+            modifiers = modifiers.filter(item => item != x1id);
+            modifiers.push($(this));
+        }
+    });
+    console.log("Modifiers:");
+	modifiers.forEach(function(m, i) {
+		console.log("\tModifier " + i + ":");
+            console.log("\t\tType: " + m.get(0).src.slice(44, -4)); // removes url and .png extension from sprite name (lazy namefinding lol)
+
+			console.log("\n\t\tX: " + m.offset().left);
+			console.log("\t\tY: " + m.offset().top);
+	});
 }
 
 function pointWithin(point, boundary) {
