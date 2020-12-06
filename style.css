@@ -119,13 +119,18 @@ button.menu {
 	width: calc(100% - 250px);
 }
 #playing-field .shape {
-	cursor: default;
+	cursor: crosshair;
 }
 
-.shape {
-	width: 80px;
-	height: 80px;
+.shape, #cannon {
+	width: 78px;
+	height: 78px; 
 	cursor: grabbing;
+}
+img#cannon {
+	border: 1px dashed #dead; /* color doesn't matter lol */
+	filter: grayscale(1);
+	cursor: crosshair;
 }
 
 .fake-shape {
@@ -167,3 +172,11 @@ button#submit-move.inactive {
 #undo-move:active {
 	background-color: darkorange;
 }
+
+#showpos {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	color: white;
+	cursor: crosshair;
+} /* debug */
